@@ -107,6 +107,5 @@ function clearCurrentPage() {
     }
 }
 
-// Inicializar
-
 updateDisplay();
+
