@@ -16,19 +16,20 @@ function toggleTheme() {
 
 let currentDate = new Date();
 
-function getMonday(d) {
+function getFriday(d) {
     d = new Date(d);
     let day = d.getDay();
-    let diff = d.getDate() - day + (day === 0 ? -6 : 1); 
+    if (day === 0) day = 7; 
+    let diff = d.getDate() - day + 5; 
     return new Date(d.setDate(diff));
 }
 
-currentDate = getMonday(currentDate);
+currentDate = getFriday(currentDate);
 
-let startDateStr = localStorage.getItem('rfc_startWeek');
+let startDateStr = localStorage.getItem('rfc_startWeek_fri');
 if (!startDateStr) {
     startDateStr = formatDate(currentDate); 
-    localStorage.setItem('rfc_startWeek', startDateStr);
+    localStorage.setItem('rfc_startWeek_fri', startDateStr);
 }
 
 function formatDate(date) {
@@ -65,7 +66,7 @@ function jumpToDate() {
     const selectedDate = document.getElementById('date-picker').value;
     if (selectedDate) {
         let pickedDate = new Date(selectedDate + "T12:00:00"); 
-        currentDate = getMonday(pickedDate);
+        currentDate = getFriday(pickedDate);
         updateDisplay();
     }
 }
@@ -77,7 +78,7 @@ function autoSave() {
         box2: document.getElementById('box-2').innerText,
         box3: document.getElementById('box-3').innerText
     };
-    localStorage.setItem(`rfc_log_week_${dateStr}`, JSON.stringify(data));
+    localStorage.setItem(`rfc_log_fri_${dateStr}`, JSON.stringify(data));
     
     const status = document.getElementById('save-status');
     status.innerText = "SAVING...";
@@ -96,7 +97,7 @@ function manualSave() {
 }
 
 function loadData(dateStr) {
-    const saved = localStorage.getItem(`rfc_log_week_${dateStr}`);
+    const saved = localStorage.getItem(`rfc_log_fri_${dateStr}`);
     if (saved) {
         const data = JSON.parse(saved);
         document.getElementById('box-1').innerText = data.box1 || "";
@@ -112,7 +113,7 @@ function loadData(dateStr) {
 function clearCurrentPage() {
     if(confirm("Deseja apagar os registros DESTA SEMANA?")) {
         const dateStr = formatDate(currentDate);
-        localStorage.removeItem(`rfc_log_week_${dateStr}`);
+        localStorage.removeItem(`rfc_log_fri_${dateStr}`);
         loadData(dateStr);
     }
 }
