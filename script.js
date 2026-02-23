@@ -16,10 +16,19 @@ function toggleTheme() {
 
 let currentDate = new Date();
 
-let startDateStr = localStorage.getItem('rfc_startDate');
+function getMonday(d) {
+    d = new Date(d);
+    let day = d.getDay();
+    let diff = d.getDate() - day + (day === 0 ? -6 : 1); 
+    return new Date(d.setDate(diff));
+}
+
+currentDate = getMonday(currentDate);
+
+let startDateStr = localStorage.getItem('rfc_startWeek');
 if (!startDateStr) {
-    startDateStr = formatDate(new Date()); 
-    localStorage.setItem('rfc_startDate', startDateStr);
+    startDateStr = formatDate(currentDate); 
+    localStorage.setItem('rfc_startWeek', startDateStr);
 }
 
 function formatDate(date) {
@@ -27,35 +36,36 @@ function formatDate(date) {
     return d.toISOString().split('T')[0];
 }
 
-function calculateDayNumber(currentDateStr) {
+function calculateWeekNumber(currentDateStr) {
     const start = new Date(startDateStr + "T00:00:00");
     const current = new Date(currentDateStr + "T00:00:00");
     const diffTime = current - start;
-    const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
+    const diffWeeks = Math.floor(diffTime / (1000 * 60 * 60 * 24 * 7));
     
-    if (diffDays < 0) return `DAY_PRE_START (${diffDays})`;
-    return `DAY_${String(diffDays + 1).padStart(2, '0')}`;
+    if (diffWeeks < 0) return `PRE_START`;
+    return `WEEK_${String(diffWeeks + 1).padStart(2, '0')}`;
 }
 
 function updateDisplay() {
     const dateStr = formatDate(currentDate);
     
     document.getElementById('date-picker').value = dateStr;
-    document.getElementById('entry-id').innerText = `IDX_${dateStr.replace(/-/g, '')}`;
-    document.getElementById('day-counter').innerText = calculateDayNumber(dateStr);
+    document.getElementById('entry-id').innerText = `WK_${dateStr.replace(/-/g, '')}`;
+    document.getElementById('day-counter').innerText = calculateWeekNumber(dateStr);
     
     loadData(dateStr);
 }
 
-function changePage(days) {
-    currentDate.setDate(currentDate.getDate() + days);
+function changePage(weeks) {
+    currentDate.setDate(currentDate.getDate() + (weeks * 7));
     updateDisplay();
 }
 
 function jumpToDate() {
     const selectedDate = document.getElementById('date-picker').value;
     if (selectedDate) {
-        currentDate = new Date(selectedDate + "T12:00:00"); 
+        let pickedDate = new Date(selectedDate + "T12:00:00"); 
+        currentDate = getMonday(pickedDate);
         updateDisplay();
     }
 }
@@ -67,7 +77,7 @@ function autoSave() {
         box2: document.getElementById('box-2').innerText,
         box3: document.getElementById('box-3').innerText
     };
-    localStorage.setItem(`rfc_log_${dateStr}`, JSON.stringify(data));
+    localStorage.setItem(`rfc_log_week_${dateStr}`, JSON.stringify(data));
     
     const status = document.getElementById('save-status');
     status.innerText = "SAVING...";
@@ -86,7 +96,7 @@ function manualSave() {
 }
 
 function loadData(dateStr) {
-    const saved = localStorage.getItem(`rfc_log_${dateStr}`);
+    const saved = localStorage.getItem(`rfc_log_week_${dateStr}`);
     if (saved) {
         const data = JSON.parse(saved);
         document.getElementById('box-1').innerText = data.box1 || "";
@@ -100,12 +110,11 @@ function loadData(dateStr) {
 }
 
 function clearCurrentPage() {
-    if(confirm("Deseja apagar os registros deste dia?")) {
+    if(confirm("Deseja apagar os registros DESTA SEMANA?")) {
         const dateStr = formatDate(currentDate);
-        localStorage.removeItem(`rfc_log_${dateStr}`);
+        localStorage.removeItem(`rfc_log_week_${dateStr}`);
         loadData(dateStr);
     }
 }
 
 updateDisplay();
-
