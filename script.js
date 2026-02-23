@@ -1,7 +1,5 @@
-// --- INICIALIZAÇÃO E TEMA ---
 const htmlRoot = document.documentElement;
 
-// Carrega o tema salvo
 if (localStorage.getItem('rfc_theme') === 'light') {
     htmlRoot.setAttribute('data-theme', 'light');
 }
@@ -16,7 +14,6 @@ function toggleTheme() {
     }
 }
 
-// --- LÓGICA DO DIÁRIO ---
 let currentDate = new Date();
 
 let startDateStr = localStorage.getItem('rfc_startDate');
@@ -81,7 +78,6 @@ function manualSave() {
     autoSave();
     const status = document.getElementById('save-status');
     status.innerText = "LOG_SAVED_SECURELY";
-    // Usa a variável verde configurada no CSS para dar o feedback de sucesso
     status.style.color = getComputedStyle(document.documentElement).getPropertyValue('--success-color'); 
     setTimeout(() => {
         status.innerText = "SYSTEM_READY";
@@ -112,4 +108,5 @@ function clearCurrentPage() {
 }
 
 // Inicializar
+
 updateDisplay();
