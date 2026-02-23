@@ -1,0 +1,210 @@
+:root {
+    --neon-blue: #00f3ff;
+    --deep-blue: #0041ff;
+    --dark-bg: #050a10;
+    --text-color: #a0c4ff;
+    --panel-bg: rgba(10, 15, 25, 0.95);
+    --box-bg: rgba(0, 0, 0, 0.3);
+    --scanline-color: rgba(0, 243, 255, 0.03);
+    --shadow-glow: rgba(0, 243, 255, 0.1);
+    --focus-bg: rgba(0, 243, 255, 0.05);
+    --grad-bg: rgba(0, 65, 255, 0.1);
+    --badge-text: #fff;
+    --success-color: #39ff14;
+}
+
+/* Tema Claro (Retro Terminal Light) */
+[data-theme="light"] {
+    --neon-blue: #0044cc;
+    --deep-blue: #001166;
+    --dark-bg: #e8ecef;
+    --text-color: #111827;
+    --panel-bg: rgba(255, 255, 255, 0.95);
+    --box-bg: rgba(255, 255, 255, 0.7);
+    --scanline-color: rgba(0, 68, 204, 0.05);
+    --shadow-glow: rgba(0, 68, 204, 0.15);
+    --focus-bg: rgba(0, 68, 204, 0.05);
+    --grad-bg: rgba(0, 68, 204, 0.1);
+    --badge-text: #fff;
+    --success-color: #00aa00;
+}
+
+body {
+    background-color: var(--dark-bg);
+    color: var(--text-color);
+    font-family: 'Courier New', Courier, monospace;
+    margin: 0;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+/* Scanline FX */
+body::before {
+    content: " ";
+    display: block;
+    position: fixed;
+    top: 0; left: 0; bottom: 0; right: 0;
+    background: linear-gradient(var(--scanline-color) 50%, rgba(0, 0, 0, 0) 50%);
+    background-size: 100% 4px;
+    z-index: 100;
+    pointer-events: none;
+}
+
+/* Navegação Superior */
+.nav-panel {
+    width: 100%;
+    max-width: 850px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    border: 1px solid var(--deep-blue);
+    padding: 10px;
+    background: var(--panel-bg);
+    transition: background 0.3s, border-color 0.3s;
+}
+
+.nav-center {
+    display: flex;
+    align-items: center;
+}
+
+button {
+    background: transparent;
+    border: 1px solid var(--neon-blue);
+    color: var(--neon-blue);
+    padding: 5px 15px;
+    cursor: pointer;
+    font-family: 'Courier New', monospace;
+    text-transform: uppercase;
+    transition: 0.3s;
+}
+
+button:hover {
+    background: var(--deep-blue);
+    color: var(--badge-text);
+    box-shadow: 0 0 10px var(--neon-blue);
+}
+
+/* Estilo do Calendário */
+input[type="date"] {
+    background: var(--box-bg);
+    border: 1px solid var(--neon-blue);
+    color: var(--neon-blue);
+    font-family: 'Courier New', monospace;
+    padding: 5px;
+    font-weight: bold;
+    font-size: 1rem;
+    text-transform: uppercase;
+    outline: none;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+input[type="date"]::-webkit-calendar-picker-indicator {
+    filter: invert(1) sepia(100%) saturate(10000%) hue-rotate(180deg);
+    cursor: pointer;
+}
+
+[data-theme="light"] input[type="date"]::-webkit-calendar-picker-indicator {
+    filter: none;
+}
+
+.container {
+    max-width: 850px;
+    width: 100%;
+    border: 1px solid var(--neon-blue);
+    padding: 40px;
+    box-shadow: 0 0 20px var(--shadow-glow);
+    background: var(--panel-bg);
+    min-height: 80vh;
+    transition: 0.3s;
+}
+
+header {
+    border-bottom: 3px double var(--neon-blue);
+    margin-bottom: 30px;
+    padding-bottom: 20px;
+}
+
+h1 { margin: 0; color: var(--neon-blue); text-shadow: 0 0 8px var(--shadow-glow); }
+
+/* Estilo do subtítulo do Autor */
+.subtitle {
+    font-size: 1.1rem;
+    color: var(--text-color);
+    margin-top: 5px;
+    margin-bottom: 15px;
+    opacity: 0.7;
+    letter-spacing: 1px;
+    font-weight: bold;
+}
+
+.meta-info {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 10px;
+    font-size: 0.9em;
+}
+
+.day-counter {
+    background: var(--focus-bg);
+    border: 1px dashed var(--neon-blue);
+    color: var(--neon-blue);
+    padding: 2px 10px;
+    font-weight: bold;
+    letter-spacing: 1px;
+    box-shadow: inset 0 0 5px var(--shadow-glow);
+}
+
+section { margin-bottom: 25px; }
+
+h2 {
+    border-left: 4px solid var(--deep-blue);
+    padding-left: 12px;
+    font-size: 1.1em;
+    color: var(--neon-blue);
+    background: linear-gradient(90deg, var(--grad-bg), transparent);
+}
+
+.content-box {
+    border: 1px solid rgba(0, 243, 255, 0.2);
+    border-color: var(--neon-blue);
+    opacity: 0.8;
+    padding: 15px;
+    min-height: 80px;
+    background: var(--box-bg);
+    color: var(--text-color);
+    white-space: pre-wrap;
+    transition: 0.3s;
+}
+
+[contenteditable="true"]:focus {
+    outline: none;
+    opacity: 1;
+    border-color: var(--neon-blue);
+    background: var(--focus-bg);
+}
+
+.save-indicator {
+    font-size: 0.7em;
+    color: var(--neon-blue);
+    float: right;
+    opacity: 0.5;
+}
+
+.action-buttons {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 30px;
+    border-top: 1px dashed var(--deep-blue);
+    padding-top: 20px;
+}
+
+.btn-save {
+    background: var(--grad-bg);
+    font-weight: bold;
+}
