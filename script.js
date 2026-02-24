@@ -118,4 +118,50 @@ function clearCurrentPage() {
     }
 }
 
+function exportToCSV() {
+    let csvContent = "Data (Sexta-feira),Atividades da Semana,Desafios Tecnicos,Aprendizados\n";
+
+    let keys = Object.keys(localStorage).filter(key => key.startsWith('rfc_log_fri_'));
+    
+    keys.sort();
+
+    if (keys.length === 0) {
+        alert("Nenhum registro encontrado no sistema para exportar.");
+        return;
+    }
+
+    keys.forEach(key => {
+        const dateStr = key.replace('rfc_log_fri_', '');
+        const dataStr = localStorage.getItem(key);
+        
+        if (dataStr) {
+            const data = JSON.parse(dataStr);
+            
+            const formatCSV = (text) => {
+                if (!text) return '""';
+                return `"${text.replace(/"/g, '""')}"`;
+            };
+
+            const col1 = formatCSV(dateStr);
+            const col2 = formatCSV(data.box1);
+            const col3 = formatCSV(data.box2);
+            const col4 = formatCSV(data.box3);
+
+            csvContent += `${col1},${col2},${col3},${col4}\n`;
+        }
+    });
+
+    const blob = new Blob([new Uint8Array([0xEF, 0xBB, 0xBF]), csvContent], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    
+    const link = document.createElement("a");
+    link.setAttribute("href", url);
+    link.setAttribute("download", "logbook_estagio.csv");
+    link.style.visibility = 'hidden';
+    
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+}
+
 updateDisplay();
