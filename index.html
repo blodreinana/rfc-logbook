@@ -45,13 +45,14 @@
             <div id="box-3" class="content-box" contenteditable="true" oninput="autoSave()"></div>
         </section>
 
-        <div class="action-buttons">
+    <div class="action-buttons">
             <button class="btn-save" onclick="manualSave()">[+] SALVAR_LOG</button>
+            
+            <button onclick="exportToCSV()" style="border-color: var(--neon-blue); color: var(--text-color);">[↓] EXPORTAR_CSV</button>
+            
             <button onclick="clearCurrentPage()" style="font-size: 0.8em; border-color: red; color: red;">LIMPAR_PAGINA</button>
         </div>
-    </div>
 
     <script src="script.js"></script>
 </body>
 </html>
-
